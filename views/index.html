@@ -1,12 +1,13 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Vue Example</title>
+	<title>SMS Sender</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<link rel="stylesheet" href="../assets/bootstrap.min.css">
 	<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
 	<script type="text/javascript" src="../node_modules/androidjs/lib/androidjs.js"></script>
 	<script src="https://use.fontawesome.com/2426bd1017.js"></script>
+	<link rel="stylesheet" href="/index.css">
 	<style>
 		* {
 			padding: 0;
@@ -38,15 +39,51 @@
 		::-ms-input-placeholder { /* Microsoft Edge */
 			color: #aaa !important;
 		}
-	
-		.app{
+
+		.nav-container,
+		header {
+			max-width: 1024px;
+			margin: 0 auto;
+		}
+
+		.app {
 			font-size:30px;
+		}
+
+		.container {
+			position: relative;
+			min-height: 83vh;
+			max-width: 1024px;
+		}
+
+		.input-color-secondary-outline {
+			background-color:#fff;
+			border:1px solid #ddd;
+			color: #fff;
 		}
 
 		.btn-color-primary {
 			background-color:#4285F4;
 			border:1px solid #4285F4;
 			color: #fff;
+		}
+
+		.btn-color-success {
+			background-color:#0F9D58;
+			border:1px solid #0F9D58;
+			color: #fff;
+		}
+
+		.btn-color-danger {
+			background-color:#DB4437;
+			border:1px solid #DB4437;
+			color: #fff;
+		}
+
+		.btn-color-default-outline {
+			color:#bbb;
+			border:1px solid #bbb;
+			background-color: #fff;
 		}
 
 		.btn-color-primary-outline {
@@ -71,6 +108,10 @@
 			width: 150px;
 		}
 
+		.btn-full {
+			width: 100%;
+		}
+
 		.nav {
 			background-color: #4285F4;
 			padding: 6px 12px 4px 12px;
@@ -78,7 +119,7 @@
 	
 		.nav-text {
 			font-size: 12px;
-			color: #fff !important;
+			color: #ddd !important;
 		}
 
 		.nav-title-wrapper {
@@ -105,10 +146,20 @@
 			position: fixed;
 			bottom: 0;
 			left: 0;
-			width: 100vw;
+			width: 100%;
 			height: 42px !important;
 			background-color: #eee;
 			display: flex;
+		}
+
+		@media only screen and (min-width: 1025px) {
+			.nav-wrapper {
+				position: static;
+				margin-top: 12px;
+				border: 1px solid #4285F4;
+				border-top: none;
+				padding: 0;
+			}
 		}
 
 		.nav-btn {
@@ -119,7 +170,7 @@
 			font-size: 12px;
 			color: rgba(66, 133, 244, .9);
 			padding: 6px 0;
-			width: 33.3vw;
+			width: calc(100% / 5);
 			border-top: 1px solid rgba(66, 133, 244, .9);
 			border-right: 1px solid rgba(66, 133, 244, .9);
 			background-color: #fff;
@@ -132,6 +183,157 @@
 
 		.nav-btn-last {
 			border-right: none;
+		}
+
+		.wrapper-chat {
+			position: absolute;
+			bottom: 0;
+			left: 0;
+		}
+
+		.wrapper-chatview {
+			min-height: 60vh;
+			max-height: 60vh;
+			overflow: auto;
+			padding: 12px 0;
+		}
+
+		.wrapper-contact {
+			max-height: 85vh;
+			overflow: auto;
+		}
+
+		.chat-input-box {
+			padding: 0 12px;
+			border-top: 1px solid #eee;
+			width: 100vw;
+		}
+
+		.chat-input {
+			width: 100%;
+			border: none;
+			background-color: #fff;
+			padding-left: 4px;
+			padding-bottom: 10vh;
+			font-size: 16px;
+		}
+
+		.chat-input:focus {
+			border: none;
+			outline: none;
+		}
+
+		.chat-message {
+			display: flex;
+			align-items: center;
+			margin-bottom: 20px;
+			/* padding: 12px; */
+		}
+
+		.chat-message-send {
+			justify-content: flex-end;
+		}
+		
+		.chat-message-icon {
+			background-color: #aaa;
+			border-radius: 50%;
+			width: 40px;
+			height: 40px;
+			margin-right: 20px;
+		}
+		
+		.chat-message-text {
+			position: relative;
+			border-radius: 4px;
+			border: 1px solid #eee;
+			padding: 6px 12px 6px 12px;
+			font-size: 16px;
+			background-color: #eee;
+			color: #000;
+		}
+
+		.chat-message-text::before {
+			position: absolute;
+			top: 12px;
+			display: block;
+			content: '';
+			width: 0;
+			height: 0;
+			border-style: solid;
+			border-width: 6px 12px 6px 0;
+			border-color: transparent #eee transparent transparent;
+		}
+
+		.chat-message-text-receive::before {
+			left: -12px;
+		}
+
+		.chat-message-icon-send {
+			order: 1;
+			margin-left: 20px;
+			margin-right: 0;
+		}
+		
+		.chat-message-text-send {
+			color: #000;
+		}
+
+		.chat-message-text-static {
+			margin-left: -20px;
+			background-color: #fff;
+			border: none;
+			font-size: 24px;
+			color: #000;
+		}
+
+		.chat-message-text-static:before {
+			display: none;
+		}
+
+		.chat-message-text-send::before {
+			right: -12px;
+			border-width: 6px 0 6px 12px;
+			border-color: transparent transparent transparent #eee;
+		}
+
+		.list {
+			width: 100%;
+		}
+
+		.list-item {
+			width: 100%;
+			padding: 12px 0;
+			font-size: 16px;
+			border-bottom: 1px solid #eee !important;
+		}
+	
+		.list-item-last {
+			border: none;
+		}
+
+		.settinglist {
+			position: relative;
+			min-height: 79vh;
+		}
+
+		.settinglist-title {
+			border-radius: 4px;
+			border: 1px solid #ddd;
+			padding: 12px;
+			padding-top: 12px;
+			padding-bottom: 0px;
+		}
+
+		.settinglist-panel {
+			position: absolute;
+			bottom: 0;
+			left: 0;
+			width: 100%;
+			margin-bottom: 12px;
+		}
+
+		.settinglist-panel-item {
+			width: 100%;
 		}
 	</style>
 </head>
@@ -150,18 +352,18 @@
 			<main class="wrapper">
 				<ul>
 					<li class="mt-4">
-						<input class="form-control btn-color-primary-outline" type="text" v-model="sms.mobile" placeholder="Recipients (separate by ',') ...">
-						<textarea class="form-control btn-color-primary-outline mt-3" rows="8" v-model="sms.msg" placeholder="Message..."></textarea>
+						<input class="form-control input-color-secondary-outline" type="text" v-model="sms.mobile" placeholder="Recipients (separate by ',') ...">
+						<textarea class="form-control input-color-secondary-outline mt-3" rows="8" v-model="sms.msg" placeholder="Message..."></textarea>
 					</li>
 					<li class="d-flex mt-2">
-						<button v-on:click="handleSendSms" class="btn btn-color-primary btn-large">
+						<button v-on:click="handleSendSms" class="btn btn-color-success btn-full mr-2">
 							<div class="nav-icon">
 								<i class="fa fa-share-square-o fa-lg"></i>
 							</div>
 						</button>
 						<button v-on:click="handleClear(false)" class="btn btn-color-warning-outline ml-auto">
 							<div class="nav-icon">
-								<i class="fa fa-refresh fa-lg"></i>
+								<i class="fa fa-trash-o fa-lg"></i>
 							</div>
 						</button>
 						<button v-on:click="handleClear(true)" class="btn btn-color-danger-outline ml-2">
@@ -173,29 +375,161 @@
 				</ul>
 			</main>
 			<footer class="wrapper">
-				<h6 class="card-subtitle text-muted nav-text">Irene &copy; 2020 All Rights Reserved.</h6>
+				<h6 class="nav-text">Irene &copy; 2020 All Rights Reserved.</h6>
 			</footer>
 		</div>
-		<nav class="nav-wrapper">
-			<div class="nav-btn" :class="{ 'nav-btn-active': currentTab === 0 }" v-on:click="handleChangeTab(0)">
-				<div class="nav-icon">
-					<i class="fa fa-comments fa-lg"></i>
+		<div class="container" v-if="currentTab === 1">	
+			<main class="wrapper">
+				<div class="wrapper-chatview">
+					<div class="chat-message chat-message-receive">
+						<div class="chat-message-icon"></div>
+						<div class="chat-message-text chat-message-text-receive">Hello World.</div>
+					</div>
+					<div class="chat-message chat-message-send">
+						<div class="chat-message-icon chat-message-icon-send"></div>
+						<div class="chat-message-text chat-message-text-send">Hello World.</div>
+					</div>
+					<div class="chat-message chat-message-send">
+						<div class="chat-message-icon chat-message-icon-send"></div>
+						<div class="chat-message-text chat-message-text-send">Hello World.</div>
+					</div>
+					<div class="chat-message chat-message-send">
+						<div class="chat-message-icon chat-message-icon-send"></div>
+						<div class="chat-message-text chat-message-text-send">Hello World.</div>
+					</div>
+					<div class="chat-message chat-message-send">
+						<div class="chat-message-icon chat-message-icon-send"></div>
+						<div class="chat-message-text chat-message-text-send">Hello World.</div>
+					</div>
+					<div class="chat-message chat-message-send">
+						<div class="chat-message-icon chat-message-icon-send"></div>
+						<div class="chat-message-text chat-message-text-send">Hello World.</div>
+					</div>
+					<div class="chat-message chat-message-send">
+						<div class="chat-message-icon chat-message-icon-send"></div>
+						<div class="chat-message-text chat-message-text-send">Hello World.</div>
+					</div>
 				</div>
-				Text
-			</div>
-			<div class="nav-btn" :class="{ 'nav-btn-active': currentTab === 1 }" v-on:click="handleChangeTab(1)">
-				<div class="nav-icon">
-					<i class="fa fa-phone fa-lg"></i>
+				<div class="wrapper-chat">
+					<div class="chat-input-box">
+						<input type="text" class="chat-input" placeholder="Enter message...">
+						<footer class="wrapper">
+							<h6 class="nav-text nav-text-chat">Irene &copy; 2020 All Rights Reserved.</h6>
+						</footer>
+					</div>
 				</div>
-				Call
-			</div>
-			<div class="nav-btn nav-btn-last" :class="{ 'nav-btn-active': currentTab === 2 }" v-on:click="handleChangeTab(2)">
-				<div class="nav-icon">
-					<i class="fa fa-cog fa-lg"></i>
+			</main>
+		</div>
+		<div class="container" v-if="currentTab === 2">	
+			<main class="wrapper wrapper-contact">
+				<ul class="list">
+					<li class="list-item">test</li>
+					<li class="list-item">bbb</li>
+					<li class="list-item">ccc</li>
+					<li class="list-item">aaddda</li>
+					<li class="list-item">eee</li>
+					<li class="list-item">fff</li>
+					<li class="list-item">aa54y56a</li>
+					<li class="list-item">a23r23aa</li>
+					<li class="list-item">a23r23raa</li>
+					<li class="list-item">a23r23aa</li>
+					<li class="list-item">aa333a</li>
+					<li class="list-item">aa22a</li>
+					<li class="list-item list-item-last">last item</li>
+				</ul>
+				<footer class="wrapper">
+					<h6 class="nav-text nav-text-chat">Irene &copy; 2020 All Rights Reserved.</h6>
+				</footer>
+			</main>
+		</div>
+		<div class="container" v-if="currentTab === 3">	
+			<main class="wrapper wrapper-contact">
+				<ul>
+					<li class="mt-4">
+						<input class="form-control input-color-secondary-outline" type="text" v-model="call.mobile" placeholder="Enter Number...">
+					</li>
+					<li class="d-flex mt-2">
+						<button v-on:click="handleCall" class="btn btn-color-success btn-full">
+							<div class="nav-icon">
+								<i class="fa fa-phone fa-lg"></i>
+							</div>
+						</button>
+					</li>
+				</ul>
+				<footer class="wrapper">
+					<h6 class="nav-text nav-text-chat">Irene &copy; 2020 All Rights Reserved.</h6>
+				</footer>
+			</main>
+		</div>
+		<div class="container" v-if="currentTab === 4">	
+			<main class="wrapper wrapper-contact">
+				<div class="settinglist">
+					<div class="settinglist-title mt-4">
+						<div class="chat-message">
+							<div class="chat-message-icon"></div>
+							<div class="chat-message-text chat-message-text-static">Username</div>
+						</div>
+					</div>
+					<div>
+						<button v-on:click="handleLogout" class="btn btn-color-warning-outline btn-full">
+							<div class="nav-icon">
+								<i class="fa fa-sign-out fa-lg"></i>
+							</div>
+						</button>
+					</div>
+					<div class="settinglist-panel">
+						<div class="d-flex mt-2 settinglist-panel-item">
+							<button v-on:click="handleDisableAccount" class="btn btn-color-default-outline btn-full">
+								<div>Disable Account</div>
+							</button>
+						</div>
+						<div class="d-flex mt-2 settinglist-panel-item">
+							<button v-on:click="handleDeleteAccount" class="btn btn-color-danger-outline btn-full">
+								<div>Delete Account</div>
+							</button>
+						</div>
+					</div>
 				</div>
-				Settings
-			</div>
-		</nav>
+				<footer class="wrapper">
+					<h6 class="nav-text nav-text-chat">Irene &copy; 2020 All Rights Reserved.</h6>
+				</footer>
+			</main>
+		</div>
+		<div class="nav-container">
+			<nav class="nav-wrapper">
+				<div class="nav-btn" :class="{ 'nav-btn-active': currentTab === 0 }" v-on:click="handleChangeTab(0)">
+					<div class="nav-icon">
+						<i class="fa fa-envelope fa-lg"></i>
+					</div>
+					Text
+				</div>
+				<div class="nav-btn" :class="{ 'nav-btn-active': currentTab === 1 }" v-on:click="handleChangeTab(1)">
+					<div class="nav-icon">
+						<i class="fa fa-comments fa-lg"></i>
+					</div>
+					Chat
+				</div>
+				<div class="nav-btn" :class="{ 'nav-btn-active': currentTab === 2 }" v-on:click="handleChangeTab(2)">
+					<div class="nav-icon">
+						<i class="fa fa-address-book-o fa-lg"></i>
+					</div>
+					Contacts
+				</div>
+				<div class="nav-btn" :class="{ 'nav-btn-active': currentTab === 3 }" v-on:click="handleChangeTab(3)">
+					<div class="nav-icon">
+						<i class="fa fa-phone fa-lg"></i>
+					</div>
+					Call
+				</div>
+				<div class="nav-btn nav-btn-last" :class="{ 'nav-btn-active': currentTab === 4 }" v-on:click="handleChangeTab(4)">
+					<div class="nav-icon">
+						<i class="fa fa-cog fa-lg"></i>
+					</div>
+					Settings
+				</div>
+			</nav>
+		</div>
+		
 		<div class="modal fade" id="warning-modal" tabindex="-1" role="dialog" aria-labelledby="warning-modal" aria-hidden="true">
 			<div class="modal-dialog" role="document">
 				<div class="modal-content">

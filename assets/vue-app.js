@@ -1,11 +1,14 @@
 new Vue({
   el: '#vue-app',
   data: {
-		currentTab: 0,
+		currentTab: 4,
 		currentModalText: '',
 		sms: {
 			mobile: "",
 			msg: ""
+		},
+		call: {
+			mobile: ''
 		},
 		warning: {
 			invalidPhoneNumber: 'Invalid Phone Number',
@@ -49,6 +52,10 @@ new Vue({
 				return true
 			}
 		},
+		handleCall() {},
+		handleLogout() {},
+		handleDisableAccount() {},
+		handleDeleteAccount() {},
 		openModal() {
 			$('#warning-modal').modal({ backdrop: true, keyboard: false, focus: true, show: true })
 		}
