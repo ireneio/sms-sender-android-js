@@ -1,0 +1,24 @@
+{
+  "name": "sms-sender",
+  "app-name": "SMS 69",
+  "package-name": "sms-sender",
+  "project-type": "webview",
+  "icon": "./assets/icon/icon.png",
+  "dist-path": "./dist",
+  "permission": [
+    "android.permission.INTERNET",
+    "android.permission.SEND_SMS"
+  ],
+  "version": "1.0.0",
+  "description": "",
+  "main": "script.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "debug:env": "node ./path.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "androidjs": "^2.0.4"
+  }
+}
