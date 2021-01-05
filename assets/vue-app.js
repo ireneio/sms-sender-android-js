@@ -14,8 +14,20 @@ new Vue({
 			invalidPhoneNumber: 'Invalid Phone Number',
 			sendSmsSuccess: 'Success',
 			sendSmsFail: 'Fail'
+		},
+		ws: {
+			message: ''
 		}
-  },
+	},
+	watch: {
+		currentTab: {
+			handler(val) {
+				if(val === 1) {
+					this.connectWs()
+				}
+			}
+		}
+	},
   methods: {
 		handleChangeTab(val) {
 			this.currentTab = Number(val)
@@ -54,10 +66,26 @@ new Vue({
 		},
 		handleCall() {},
 		handleLogout() {},
-		handleDisableAccount() {},
+		handleDisableAccount() {}, 
 		handleDeleteAccount() {},
+		connectWs() {
+			initWs(this)
+		},
 		openModal() {
 			$('#warning-modal').modal({ backdrop: true, keyboard: false, focus: true, show: true })
 		}
   }
 })
+
+function initWs(vm) {
+	const ws = new WebSocket('ws://localhost:8082/path1')
+
+	ws.onopen = function() {
+		ws.send('Frontend Says Hello!')
+	}
+
+	ws.onmessage = function(message) {
+		vm.ws.message = message.data
+		console.log(message.data)
+	}
+}

@@ -20,7 +20,8 @@
   "author": "Irene",
   "license": "ISC",
   "dependencies": {
-    "androidjs": "^2.0.4"
+    "androidjs": "^2.0.4",
+    "ws": "^7.4.2"
   },
   "theme": {
     "fullScreen": false
